@@ -14,7 +14,7 @@ import android.view.View;
 import com.example.contactapp2.databinding.ActivityMainBinding;
 import java.util.ArrayList;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements ItemClickListener{
 
     private ActivityMainBinding binding;
     private ArrayList<Contact> contactList;
@@ -24,7 +24,6 @@ public class MainActivity extends AppCompatActivity {
     private ContactDao contactDao;
 
     private SearchView searchView;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,6 +60,8 @@ public class MainActivity extends AppCompatActivity {
         contactAdapter = new ContactAdapter(contactList);
         binding.rvContacts.setAdapter(contactAdapter);
         binding.rvContacts.setLayoutManager(new LinearLayoutManager(this));
+
+        contactAdapter.setClickListener(this);
 
         binding.floatingActionButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -116,5 +117,17 @@ public class MainActivity extends AppCompatActivity {
             return ;
         }
         super.onBackPressed();
+    }
+
+    @Override
+    public void onClick(View view, int position) {
+        final Contact contact = contactList.get(position);
+        int id = contact.getId();
+        Intent intent = new Intent(MainActivity.this, UpdateContact.class);
+        intent.putExtra("id", id);
+        intent.putExtra("name", contact.getName());
+        intent.putExtra("phone", contact.getPhone());
+        intent.putExtra("email", contact.getEmail());
+        startActivityForResult(intent, 100);
     }
 }

@@ -18,11 +18,23 @@ public class Contact {
     @ColumnInfo(name = "email")
     private String email;
 
+//    @ColumnInfo(name = "imgAvatar")
+//    private byte[] imgAvatar;
+
+//    public Contact(String name, String phone, String email, byte[] imgAvatar) {
+//        this.name = name;
+//        this.phone = phone;
+//        this.email = email;
+//        this.imgAvatar = imgAvatar;
+//    }
+
     public Contact(String name, String phone, String email) {
         this.name = name;
         this.phone = phone;
         this.email = email;
     }
+
+    public Contact(){}
 
     public int getId() {
         return id;
@@ -55,5 +67,13 @@ public class Contact {
     public void setEmail(String email) {
         this.email = email;
     }
+
+//    public byte[] getImgAvatar() {
+//        return imgAvatar;
+//    }
+
+//    public void setImgAvatar(byte[] imgAvatar) {
+//        this.imgAvatar = imgAvatar;
+//    }
 }
 

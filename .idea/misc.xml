@@ -3,6 +3,9 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Android/ContactApp-master/app/src/main/res/layout/activity_add_new_contact.xml" value="0.18802083333333333" />
+        <entry key="..\:/Android/ContactApp-master/app/src/main/res/layout/activity_main.xml" value="0.25416666666666665" />
+        <entry key="..\:/Android/ContactApp-master/app/src/main/res/layout/activity_update_contact.xml" value="0.17733990147783252" />
         <entry key="..\:/Android/ContactApp2/app/src/main/res/drawable-v24/ic_launcher_foreground.xml" value="0.1" />
         <entry key="..\:/Android/ContactApp2/app/src/main/res/drawable/ic_launcher_foreground.xml" value="0.1805" />
         <entry key="..\:/Android/ContactApp2/app/src/main/res/layout/activity_add_new_contact.xml" value="0.2033514492753623" />

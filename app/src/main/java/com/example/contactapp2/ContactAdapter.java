@@ -13,14 +13,13 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
-import java.util.List;
-import java.util.Locale;
 
 public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ViewHolder>
-       implements Filterable {
+       implements Filterable{
     private ArrayList<Contact> contacts;
     private ArrayList<Contact> ContactsOld;
     private Context context;
+    private ItemClickListener clickListener;
 
     public ContactAdapter(ArrayList<Contact> ContactsOld) {
         this.contacts = ContactsOld;
@@ -92,15 +91,28 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ViewHold
         };
     }
 
+    public void setClickListener(ItemClickListener itemClickListener){
+        this.clickListener = itemClickListener;
+    }
+
     //Giu data cua 1 hang
-    public static class ViewHolder extends RecyclerView.ViewHolder {
+    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         public TextView txtName;
         public  ImageView ivAvatar;
-        public ViewHolder(View view) {
-            super(view);
+        public ViewHolder(View itemView) {
+            super(itemView);
 
-            txtName = view.findViewById(R.id.txt_name);
-            ivAvatar = view.findViewById(R.id.iv_avatar);
+            txtName = itemView.findViewById(R.id.txt_name);
+            ivAvatar = itemView.findViewById(R.id.iv_avatar);
+            itemView.setTag(itemView);
+            itemView.setOnClickListener(this);
+        }
+
+        @Override
+        public void onClick(View view) {
+            if(clickListener != null){
+                clickListener.onClick(view, getAdapterPosition());
+            }
         }
     }
 }
