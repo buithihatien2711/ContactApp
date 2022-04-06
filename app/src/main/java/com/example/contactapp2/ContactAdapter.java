@@ -1,6 +1,8 @@
 package com.example.contactapp2;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -49,8 +51,14 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ViewHold
     @Override
     public void onBindViewHolder(@NonNull ContactAdapter.ViewHolder holder, int position) {
         holder.txtName.setText(contacts.get(position).getName());
-//        holder.txtPhone.setText(this.ContactsOld.get(position).getPhone());
-//        holder.txtEmail.setText(this.ContactsOld.get(position).getEmail());
+
+        byte[] byteArray = contacts.get(position).getImgAvatar();
+
+        if(byteArray != null){
+            Bitmap bmp = BitmapFactory.decodeByteArray(byteArray, 0, byteArray.length);
+            holder.ivAvatar.setImageBitmap(bmp);
+        }
+
     }
 
     @Override
@@ -58,6 +66,7 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ViewHold
 
         return contacts.size();
     }
+
 
     @Override
     public Filter getFilter() {
@@ -94,6 +103,8 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ViewHold
     public void setClickListener(ItemClickListener itemClickListener){
         this.clickListener = itemClickListener;
     }
+
+
 
     //Giu data cua 1 hang
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {

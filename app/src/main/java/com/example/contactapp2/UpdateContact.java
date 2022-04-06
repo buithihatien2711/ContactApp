@@ -11,6 +11,8 @@ import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Log;
@@ -22,13 +24,17 @@ import android.widget.Toast;
 
 import com.example.contactapp2.databinding.ActivityUpdateContactBinding;
 
+import java.io.ByteArrayOutputStream;
+
 public class UpdateContact extends AppCompatActivity {
     private int id;
     private String name;
     private String phone;
     private String email;
+    private byte[] imgAvt;
     Contact contact;
     ActivityUpdateContactBinding binding;
+    private Bitmap bitmapAvt;
 
 
     @Override
@@ -51,12 +57,21 @@ public class UpdateContact extends AppCompatActivity {
 
             email = intent.getStringExtra("email");
             binding.txtEmail.setText(email);
+
+            imgAvt = intent.getByteArrayExtra("imgAvt");
+            if(imgAvt != null){
+                Bitmap bmp = BitmapFactory.decodeByteArray(imgAvt, 0, imgAvt.length);
+                binding.imageView.setImageBitmap(bmp);
+            }
+
+            //Sửa cái intent vs đoạn save nữa
         }
 
         binding.btnUpdate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                updateContact(id, name, phone, email);
+                byte[] imgAvatar = getBitmapAsByteArray(bitmapAvt);
+                updateContact(id, name, phone, email, imgAvatar);
             }
         });
 
@@ -74,27 +89,42 @@ public class UpdateContact extends AppCompatActivity {
         });
     }
 
+    //Take a photo
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if(requestCode == 200){
-            Bitmap bitmap = (Bitmap) data.getExtras().get("data");
-            binding.imageView.setImageBitmap(bitmap);
+            bitmapAvt = (Bitmap) data.getExtras().get("data");
+            binding.imageView.setImageBitmap(bitmapAvt);
         }
     }
 
-    private void updateContact(int id, String name, String phone, String email) {
+    private void updateContact(int id, String name, String phone, String email, byte[] imgAvatar) {
         AppDatabase db  = AppDatabase.getInstance(this.getApplicationContext());
-        contact = new Contact();
-        contact.setId(id);
-        contact.setName(binding.txtName.getText().toString());
-        contact.setPhone(binding.txtPhone.getText().toString());
-        contact.setEmail(binding.txtEmail.getText().toString());
-
+        contact = new Contact(id, name,phone, email, imgAvatar);
         db.contactDao().updateContact(contact);
+
+//        contact.setId(id);
+//        contact.setName(binding.txtName.getText().toString());
+//        contact.setPhone(binding.txtPhone.getText().toString());
+//        contact.setEmail(binding.txtEmail.getText().toString());
+//
+//        byte[] imgAvt = getBitmapAsByteArray(bitmapAvt);
+//        contact.setImgAvatar(imgAvt);
+
 //        db.contactDao().updateContact(id, name, phone, email);
 
         finish();
 
+    }
+
+    public static byte[] getBitmapAsByteArray(Bitmap bitmap) {
+        if(bitmap != null){
+            ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+            bitmap.compress(Bitmap.CompressFormat.PNG, 0, outputStream);
+            return outputStream.toByteArray();
+        }else{
+            return null;
+        }
     }
 }

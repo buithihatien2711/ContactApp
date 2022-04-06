@@ -18,21 +18,29 @@ public class Contact {
     @ColumnInfo(name = "email")
     private String email;
 
-//    @ColumnInfo(name = "imgAvatar")
-//    private byte[] imgAvatar;
+    @ColumnInfo(name = "imgAvatar")
+    private byte[] imgAvatar;
 
-//    public Contact(String name, String phone, String email, byte[] imgAvatar) {
-//        this.name = name;
-//        this.phone = phone;
-//        this.email = email;
-//        this.imgAvatar = imgAvatar;
-//    }
-
-    public Contact(String name, String phone, String email) {
+    public Contact(int id, String name, String phone, String email, byte[] imgAvatar) {
+        this.id = id;
         this.name = name;
         this.phone = phone;
         this.email = email;
+        this.imgAvatar = imgAvatar;
     }
+
+    public Contact(String name, String phone, String email, byte[] imgAvatar) {
+        this.name = name;
+        this.phone = phone;
+        this.email = email;
+        this.imgAvatar = imgAvatar;
+    }
+
+//    public Contact(String name, String phone, String email) {
+//        this.name = name;
+//        this.phone = phone;
+//        this.email = email;
+//    }
 
     public Contact(){}
 
@@ -68,12 +76,12 @@ public class Contact {
         this.email = email;
     }
 
-//    public byte[] getImgAvatar() {
-//        return imgAvatar;
-//    }
+    public byte[] getImgAvatar() {
+        return imgAvatar;
+    }
 
-//    public void setImgAvatar(byte[] imgAvatar) {
-//        this.imgAvatar = imgAvatar;
-//    }
+    public void setImgAvatar(byte[] imgAvatar) {
+        this.imgAvatar = imgAvatar;
+    }
 }
 

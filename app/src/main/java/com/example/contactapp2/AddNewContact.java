@@ -9,6 +9,7 @@ import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.view.View;
@@ -40,7 +41,7 @@ public class AddNewContact extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 byte[] imgAvt = getBitmapAsByteArray(bitmapAvt);
-                saveNewUser(name.getText().toString(), phone.getText().toString(), email.getText().toString()); //, imgAvt);
+                saveNewUser(name.getText().toString(), phone.getText().toString(), email.getText().toString(), imgAvt);
             }
         });
 
@@ -57,6 +58,7 @@ public class AddNewContact extends AppCompatActivity {
         });
     }
 
+    //Take a photo
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -66,21 +68,24 @@ public class AddNewContact extends AppCompatActivity {
         }
     }
 
-    private void saveNewUser(String name, String phone, String email){ //, byte[] imgAvatar) {
+    private void saveNewUser(String name, String phone, String email, byte[] imgAvatar) {
         AppDatabase db  = AppDatabase.getInstance(this.getApplicationContext());
 
-//        Contact contact = new Contact(name, phone, email, imgAvatar);
+        Contact contact = new Contact(name, phone, email, imgAvatar);
 
-        Contact contact = new Contact(name, phone, email);
+//        Contact contact = new Contact(name, phone, email);
         db.contactDao().insertAll(contact);
-
         finish();
 
     }
 
     public static byte[] getBitmapAsByteArray(Bitmap bitmap) {
-        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.PNG, 0, outputStream);
-        return outputStream.toByteArray();
+        if(bitmap != null){
+            ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+            bitmap.compress(Bitmap.CompressFormat.PNG, 0, outputStream);
+            return outputStream.toByteArray();
+        }else{
+            return null;
+        }
     }
 }

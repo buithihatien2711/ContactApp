@@ -8,10 +8,14 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.View;
 import com.example.contactapp2.databinding.ActivityMainBinding;
+
+import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity implements ItemClickListener{
@@ -45,17 +49,12 @@ public class MainActivity extends AppCompatActivity implements ItemClickListener
 //        });
 
         contactList = new ArrayList<Contact>();
-        contactList = (ArrayList<Contact>) contactDao.getAllContact();
+        contactList = getAllContacts();
+
 //        contactList.add(new Contact("Nguyen Van A", "098298492832", "a@gmail.com"));
 //        contactList.add(new Contact("Nguyen Van B", "098298492832", "b@gmail.com"));
 //        contactList.add(new Contact("Nguyen Van C", "098298492832", "c@gmail.com"));
 //
-//        AsyncTask.execute(new Runnable() {
-//            @Override
-//            public void run() {
-//                contactList = (ArrayList<Contact>) contactDao.getAllContact();
-//            }
-//        });
 
         contactAdapter = new ContactAdapter(contactList);
         binding.rvContacts.setAdapter(contactAdapter);
@@ -73,15 +72,17 @@ public class MainActivity extends AppCompatActivity implements ItemClickListener
 
         @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == 100) {
             contactList = new ArrayList<Contact>();
             contactList = (ArrayList<Contact>) contactDao.getAllContact();
+
             contactAdapter = new ContactAdapter(contactList);
             binding.rvContacts.setAdapter(contactAdapter);
             binding.rvContacts.setLayoutManager(new LinearLayoutManager(this));
         }
 
-        super.onActivityResult(requestCode, resultCode, data);
+//        super.onActivityResult(requestCode, resultCode, data);
     }
 
     @Override
@@ -122,12 +123,17 @@ public class MainActivity extends AppCompatActivity implements ItemClickListener
     @Override
     public void onClick(View view, int position) {
         final Contact contact = contactList.get(position);
-        int id = contact.getId();
         Intent intent = new Intent(MainActivity.this, UpdateContact.class);
-        intent.putExtra("id", id);
+        intent.putExtra("id", contact.getId());
         intent.putExtra("name", contact.getName());
         intent.putExtra("phone", contact.getPhone());
         intent.putExtra("email", contact.getEmail());
+        intent.putExtra("imgAvt", contact.getImgAvatar());
         startActivityForResult(intent, 100);
+    }
+
+    public ArrayList<Contact> getAllContacts(){
+        ArrayList<Contact> contacts = (ArrayList<Contact>) contactDao.getAllContact();
+        return contacts;
     }
 }
